@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 const String _name = "Your Name";
+var member = ["私","モブ"];
 
 void main() {
   runApp(new FriendlychatApp());
@@ -30,9 +31,11 @@ class ChatScreen extends StatefulWidget {                     //modified
 
 class ChatScreenState extends State<ChatScreen> {                  
   final List<ChatMessage> _messages = <ChatMessage>[];            //メッセージの格納リスト
+  
   final TextEditingController _textController = new TextEditingController(); //new
   @override                                                        //new
   Widget build(BuildContext context) {
+    String dropdownValue = 'One';
     return new Scaffold(
       appBar: new AppBar(
         title: new Text("Lineもどきの会"),
@@ -47,19 +50,40 @@ class ChatScreenState extends State<ChatScreen> {
               itemBuilder: (_, int index) => _messages[index],      //new
               itemCount: _messages.length,                          //new
             ),                                                      //new
-          ),                                                        //new
-          new Divider(height: 1.0),                                 //new
+          ),
+          
+          new Divider(height: 1.0), 
+
+          new Container(
+              child: DropdownButton<String>(
+                value: dropdownValue,
+                onChanged: (String newValue) {
+                  setState(() {
+                    dropdownValue = newValue;
+                  });
+                },
+                items: <String>['One', 'Two', 'Free', 'Four']
+                  .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  })
+                  .toList(),
+              ),
+          ),
           new Container(                                            //new
             decoration: new BoxDecoration(
               color: Theme.of(context).cardColor),                  //new
             child: _buildTextComposer(),                       //modified
-          ),                                                        //new
+          ),                                                       //new
         ],                                                          //new
       ),                                                            //new
     );
   }
 
   Widget _buildTextComposer() {
+    
     return new Container(
       margin: const EdgeInsets.symmetric(horizontal: 8.0),       //おそらくmargin
       child: new Row(                                            //new
@@ -96,6 +120,7 @@ class ChatScreenState extends State<ChatScreen> {
               icon: new Icon(Icons.send),                                //new
               onPressed: () => _handleSubmitted(_textController.text)),  //new
           ),                                                      //new
+          
         ],                                                        //new
       ), 
     );
@@ -125,12 +150,12 @@ class ChatMessage extends StatelessWidget {
         children: <Widget>[
           new Container(
             margin: const EdgeInsets.only(right: 16.0),
-            child: new CircleAvatar(child: new Text(_name[0])),
+            child: new CircleAvatar(child: new Text(member[1])),
           ),
           new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              new Text(_name, style: Theme.of(context).textTheme.subhead),
+              new Text(member[1], style: Theme.of(context).textTheme.subhead),
               new Container(
                 margin: const EdgeInsets.only(top: 5.0),
                 child: new Text(text),
@@ -142,3 +167,38 @@ class ChatMessage extends StatelessWidget {
     );
   }
 }
+
+String dropdownValue = 'One';
+class MyStatefulWidget extends StatefulWidget {
+  MyStatefulWidget({Key key}) : super(key: key);
+
+  @override
+  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: DropdownButton<String>(
+          value: dropdownValue,
+          onChanged: (String newValue) {
+            setState(() {
+              dropdownValue = newValue;
+            });
+          },
+          items: <String>['One', 'Two', 'Free', 'Four']
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+}
+
+
+
