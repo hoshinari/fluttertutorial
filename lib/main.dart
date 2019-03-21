@@ -17,13 +17,15 @@ class FriendlychatApp extends StatelessWidget {
       home: new ChatScreen(),
     );
   }
+
 }
 
 // Modify the ChatScreen class definition to extend StatefulWidget.
 
 class ChatScreen extends StatefulWidget {                     //modified
   @override                                                        //new
-  State createState() => new ChatScreenState();                    //new
+  State createState() => new ChatScreenState();        
+              //new
   
 } 
 
@@ -156,7 +158,7 @@ class ChatScreenState extends State<ChatScreen> {
 }
 class ChatMessage extends StatelessWidget {
   ChatMessage({this.text});
-  
+
   final String text;
   @override
   Widget build(BuildContext context) {
