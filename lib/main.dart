@@ -31,6 +31,8 @@ class ChatScreen extends StatefulWidget {                     //modified
 
 class ChatScreenState extends State<ChatScreen> {                  
   final List<ChatMessage> _messages = <ChatMessage>[];            //メッセージの格納リスト
+  String _message;
+  String _selected = 'One';
   
   final TextEditingController _textController = new TextEditingController(); //new
   @override                                                        //new
@@ -55,23 +57,9 @@ class ChatScreenState extends State<ChatScreen> {
           new Divider(height: 1.0), 
 
           new Container(
-              child: DropdownButton<String>(
-                value: dropdownValue,
-                onChanged: (String newValue) {
-                  setState(() {
-                    dropdownValue = newValue;
-                  });
-                },
-                items: <String>['One', 'Two', 'Free', 'Four']
-                  .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  })
-                  .toList(),
-              ),
+            child:_buildMemberComposer(),
           ),
+
           new Container(                                            //new
             decoration: new BoxDecoration(
               color: Theme.of(context).cardColor),                  //new
@@ -80,6 +68,34 @@ class ChatScreenState extends State<ChatScreen> {
         ],                                                          //new
       ),                                                            //new
     );
+  }
+
+  Widget _buildMemberComposer(){
+    return new Container(
+              child: DropdownButton<String>(
+                value: _selected,
+                onChanged: (String value)=> popupSelected(value),
+                items: <DropdownMenuItem<String>>[
+                  const DropdownMenuItem<String>(
+                    value: 'One',
+                    child: const Text('One'),
+                  ),
+                  const DropdownMenuItem<String>(
+                    value: 'Two',
+                    child: const Text('Two'),
+                  ),
+                ],
+              ),
+              );
+  }
+
+  void popupSelected(String value){
+    setState((){
+      _selected = value;
+      _message = 'select: $_selected';
+
+    });
+
   }
 
   Widget _buildTextComposer() {
@@ -140,6 +156,7 @@ class ChatScreenState extends State<ChatScreen> {
 }
 class ChatMessage extends StatelessWidget {
   ChatMessage({this.text});
+  
   final String text;
   @override
   Widget build(BuildContext context) {
@@ -155,7 +172,7 @@ class ChatMessage extends StatelessWidget {
           new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              new Text(member[1], style: Theme.of(context).textTheme.subhead),
+              new Text(_, style: Theme.of(context).textTheme.subhead),
               new Container(
                 margin: const EdgeInsets.only(top: 5.0),
                 child: new Text(text),
@@ -167,38 +184,5 @@ class ChatMessage extends StatelessWidget {
     );
   }
 }
-
-String dropdownValue = 'One';
-class MyStatefulWidget extends StatefulWidget {
-  MyStatefulWidget({Key key}) : super(key: key);
-
-  @override
-  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
-}
-
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: DropdownButton<String>(
-          value: dropdownValue,
-          onChanged: (String newValue) {
-            setState(() {
-              dropdownValue = newValue;
-            });
-          },
-          items: <String>['One', 'Two', 'Free', 'Four']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
-}
-
 
 
